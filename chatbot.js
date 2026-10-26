@@ -1,132 +1,57 @@
-const chatInput = document.getElementById("userInput");
-const chatButton = document.getElementById("sendButton");
-const chatMessages = document.getElementById("chatMessages");
-const chatStatus = document.getElementById("chatStatus");
+const form = document.getElementById("chatForm");
+const input = document.getElementById("chatInput");
+const messages = document.getElementById("chatMessages");
+const statusText = document.getElementById("chatStatus");
+const sendButton = document.getElementById("chatSend");
 
-// Temperature for our experiment
-let chatTemperature = 0.9;
-
-function showChatMessage(role, text) {
-  const message = document.createElement("div");
-
-  message.className =
-    "chat-message " +
-    (role === "user" ? "chat-user" : "chat-assistant");
-
-  message.textContent = text;
-  chatMessages.appendChild(message);
-
-  chatMessages.scrollTop = chatMessages.scrollHeight;
+function showMessage(text, kind) {
+  const p = document.createElement("p");
+  p.className = kind === "user" ? "user-message" : "bot-message";
+  p.textContent = text;
+  messages.appendChild(p);
+  messages.scrollTop = messages.scrollHeight;
 }
 
-// Disable chat when local configuration is absent
-if (typeof CONFIG === "undefined" ||
-    !CONFIG.apiKey ||
-    CONFIG.apiKey === "YOUR_PRIVATE_GROQ_KEY") {
-  chatButton.disabled = true;
-  chatStatus.textContent =
-    "AI chat is available in the local demonstration only.";
-}
-
-async function sendChatMessage() {
-  if (chatButton.disabled) return;
-
-  const question = chatInput.value.trim();
-
-  if (!question) return;
-
-  showChatMessage("user", question);
-  chatInput.value = "";
-
-  chatButton.disabled = true;
-  chatStatus.textContent = "AI is thinking...";
-
-  try {
-    const response = await fetch(
-      CONFIG.baseUrl.replace(/\/$/, "") +
-      "/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + CONFIG.apiKey
-        },
-        body: JSON.stringify({
-          model: CONFIG.model,
-          temperature: chatTemperature,
-          messages: [
-            {
-              role: "system",
-              content:
-                "You are a helpful AI assistant."
-            },
-            {
-              role: "user",
-              content: question
-            }
-          ]
-        })
-      }
-    );
-
-    if (response.status === 429) {
-      throw new Error("RATE_LIMIT");
-    }
-
-    
-    
-    if (!response.ok) {
-        const errorData = await response.json();
-    
-        console.log(
-        "Groq error:",
-        errorData.error?.message || "Unknown API error"
-        );
-    
-        throw new Error("API_ERROR");
-    }
-  
-  
-
-    const data = await response.json();
-
-    const answer = data.choices?.[0]?.message?.content;
-
-    if (typeof answer !== "string" || !answer.trim()) {
-      throw new Error("INVALID_RESPONSE");
-    }
-
-    showChatMessage("assistant", answer);
-
-  } catch (error) {
-    console.error("Chat error:", error.message);
-
-    if (error.message === "RATE_LIMIT") {
-      showChatMessage(
-        "assistant",
-        "Too many requests. Please wait and try again."
-      );
-    } else if (!navigator.onLine) {
-      showChatMessage(
-        "assistant",
-        "No internet connection. Please reconnect."
-      );
-    } else {
-      showChatMessage(
-        "assistant",
-        "AI service unavailable. Please try again."
-      );
-    }
-  } finally {
-    chatButton.disabled = false;
-    chatStatus.textContent = "";
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const question = input.value.trim();
+  if (!question) { statusText.textContent = "Please type a question."; return; }
+  // config.js is git-ignored, so it is missing on a deployed copy
+  if (typeof CONFIG === "undefined" || CONFIG.apiKey === "PASTE_YOUR_GROQ_API_KEY_HERE") {
+    statusText.textContent = "Add your Groq API key in config.js first.";
+    return;
   }
-}
-
-chatButton.addEventListener("click", sendChatMessage);
-
-chatInput.addEventListener("keydown", function(event) {
-  if (event.key === "Enter") {
-    sendChatMessage();
+  showMessage(question, "user");
+  input.value = "";
+  sendButton.disabled = true;
+  statusText.textContent = "Thinking...";
+  try {
+    const response = await fetch(`${CONFIG.baseUrl}/chat/completions`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${CONFIG.apiKey}`
+      },
+      body: JSON.stringify({
+        model: CONFIG.model,
+        temperature: 0.7,
+        messages: [
+          { role: "system", content: "You are a friendly portfolio chatbot. Keep replies under 60 words. If you do not know a personal detail, say so rather than inventing it." },
+          { role: "user", content: question }
+        ]
+      })
+    });
+    if (!response.ok) {
+      if (response.status === 401) throw new Error("Check your API key.");
+      if (response.status === 429) throw new Error("Too many requests. Wait and try again.");
+      throw new Error(`API request failed (HTTP ${response.status}).`);
+    }
+    const data = await response.json();
+    showMessage(data.choices?.[0]?.message?.content || "No reply received.", "bot");
+    statusText.textContent = "";
+  } catch (error) {
+    statusText.textContent = "Chat unavailable. " + error.message;
+  } finally {
+    sendButton.disabled = false;
   }
 });

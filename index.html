@@ -1,117 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Harshit Gupta</title>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="chatbot.css">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PLACEHOLDER Your Name | Portfolio</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="chatbot.css">
+</head>
+<body>
+  <header>
+    <h1>PLACEHOLDER Your Name</h1>
+    <p>PLACEHOLDER one-line tagline</p>
+  </header>
+  <main>
+    <section id="about">
+      <h2>About</h2>
+      <p>PLACEHOLDER: Write two or three sentences about yourself.</p>
+    </section>
 
-  </head>
-  <body>
-    <header class="site-header">
-      <h1>Harshit Gupta</h1>
-      <p class="tagline">Trainer at JECRC College, teaching prompt engineering</p>
-    </header>
+    <section id="skills">
+      <h2>Skills</h2>
+      <ul>
+        <li>PLACEHOLDER skill 1</li>
+        <li>PLACEHOLDER skill 2</li>
+        <li>PLACEHOLDER skill 3</li>
+      </ul>
+    </section>
 
-    <main>
-      <section class="about" aria-labelledby="about-heading">
-        <h2 id="about-heading">About</h2>
-        <p>
-          I am a trainer at JECRC College, where I teach prompt engineering and help students
-          learn how to work effectively with modern AI tools. I enjoy turning complex ideas
-          into clear, practical lessons that people can apply straight away.
-        </p>
-        <p>
-          Away from the classroom I like playing football and travelling. Those hobbies keep
-          me curious, competitive, and open to new places and people.
-        </p>
-      </section>
+    <section id="projects">
+      <h2>Projects</h2>
+      <ul>
+        <li><a href="https://github.com/">PLACEHOLDER project 1 link</a></li>
+        <li><a href="https://github.com/">PLACEHOLDER project 2 link</a></li>
+      </ul>
+    </section>
 
-      <section class="skills" aria-labelledby="skills-heading">
-        <h2 id="skills-heading">Skills</h2>
-        <ul>
-          <li>Machine Learning</li>
-          <li>C++</li>
-          <li>Python</li>
-          <li>Power BI</li>
-          <li>SQL</li>
-        </ul>
-      </section>
-
-      <section class="projects" aria-labelledby="projects-heading">
-        <h2 id="projects-heading">Projects</h2>
-        <ul>
-          <li>
-            <a href="#prompt-engineering">Prompt Engineering Training at JECRC</a>
-            <p>Designed and delivered prompt engineering sessions for students at JECRC College, covering practical prompting, evaluation, and responsible use of AI.</p>
-          </li>
-          <li>
-            <a href="#machine-learning">Machine Learning with Python</a>
-            <p>Built machine learning workflows in Python for data preparation, model training, and evaluation.</p>
-          </li>
-          <li>
-            <a href="#analytics">Analytics with Power BI and SQL</a>
-            <p>Created dashboards and queries using Power BI and SQL to turn raw data into clear, useful insights.</p>
-          </li>
-        </ul>
-      </section>
-    </main>
-    <section id="weather">
-      <h2>Weather</h2>
-  
-      <input
-          type="text"
-          id="cityInput"
-          placeholder="Enter a city"
-      >
-  
-      <button id="weatherButton">
-          Get Weather
-      </button>
-  
-      <div id="weatherResult">
-          Enter a city to see the weather.
+    <section id="weather-section" class="weather-section">
+      <h2>Live Weather Checker</h2>
+      <p>Enter a city to check its current weather.</p>
+      <div class="weather-controls">
+        <input id="cityInput" type="text" placeholder="Enter city (e.g., Jaipur)">
+        <button id="weatherButton" type="button">Get Weather</button>
       </div>
-  </section>
+      <p id="weatherResult" aria-live="polite">Enter a city and click Get Weather.</p>
+    </section>
 
-<section class="ai-chat">
-  <h2>Ask My AI Assistant</h2>
-
-  <p>
-    Ask questions about my portfolio.
-  </p>
-
-  <div id="chatMessages" aria-live="polite"></div>
-
-  <div class="chat-input-row">
-    <input
-      type="text"
-      id="userInput"
-      placeholder="Type your question..."
-    />
-
-    <button id="sendButton" type="button">
-      Send
-    </button>
-  </div>
-
-  <p id="chatStatus" role="status"></p>
-
-  <p class="chat-note">
-    AI chat works in the local classroom
-    demonstration only. The API key is
-    not published with this website.
-  </p>
-</section>
-
-
-    <footer class="site-footer">
-      <p>Email: <a href="mailto:hgharshitgupta55@gmail.com">hgharshitgupta55@gmail.com</a></p>
-    </footer>
-    <button id="themeToggle">Switch to Dark Mode</button>
-    <script src="script.js"></script>
-    <script src="config.js"></script>
-    <script src="chatbot.js"></script> 
-  </body>
+    <section id="portfolio-chatbot" class="chatbot-section">
+      <h2>Ask My Portfolio Chatbot</h2>
+      <p>Ask a question and get a response from the AI.</p>
+      <div id="chatMessages" class="chat-messages" aria-live="polite">
+        <p class="bot-message">Hello! Ask me something about this portfolio.</p>
+      </div>
+      <form id="chatForm" class="chat-form">
+        <input id="chatInput" type="text" placeholder="Type your question" required>
+        <button id="chatSend" type="submit">Send</button>
+      </form>
+      <p id="chatStatus" aria-live="polite"></p>
+    </section>
+  </main>
+  <footer>
+    <p>PLACEHOLDER &copy; Your Name</p>
+  </footer>
+  <button id="themeToggle">Switch to Dark Mode</button>
+  <script src="script.js"></script>
+  <script src="config.js"></script>
+  <script src="chatbot.js"></script>
+</body>
 </html>
